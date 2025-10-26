@@ -57,11 +57,12 @@ processResources {
     }
 }
 
+tasks.named('jar') {
+    archiveFileName = 'HopperLimiter.jar'
+}
+
 tasks.named('shadowJar') {
-    archiveBaseName = 'HopperLimiter'
-    archiveClassifier = null
-    archiveAppendix = null
-    archiveVersion = null
+    archiveFileName = 'HopperLimiter.jar'
 
     // Exclude unnecessary META-INF files to reduce JAR size
     exclude 'META-INF/maven/**'
