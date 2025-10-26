@@ -29,6 +29,9 @@ public class Config {
     private String limitSoundType;
     private String placedSoundType;
 
+    // Debug settings
+    private boolean debugEnabled;
+
     public Config(JavaPlugin plugin) {
         this.plugin = plugin;
         loadConfig();
@@ -56,6 +59,9 @@ public class Config {
         enableSound = config.getBoolean("sounds.enabled", true);
         limitSoundType = config.getString("sounds.limit-sound", "ENTITY_ENDERMAN_TELEPORT");
         placedSoundType = config.getString("sounds.placed-sound", "ENTITY_ITEM_PICKUP");
+
+        // Load debug settings
+        debugEnabled = config.getBoolean("debug.enabled", false);
     }
 
     public void reloadConfig() {
@@ -106,6 +112,10 @@ public class Config {
 
     public String getPlacedSoundType() {
         return placedSoundType;
+    }
+
+    public boolean isDebugEnabled() {
+        return debugEnabled;
     }
 
     public int getLimit(String blockType) {

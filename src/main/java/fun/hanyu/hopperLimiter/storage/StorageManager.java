@@ -25,7 +25,13 @@ public class StorageManager {
             plugin.getDataFolder().mkdirs();
         }
 
-        initializeDatabase();
+        try {
+            initializeDatabase();
+        } catch (Exception e) {
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().warning("Failed to initialize storage: " + e.getMessage());
+            }
+        }
     }
 
     /**
@@ -65,10 +71,14 @@ public class StorageManager {
                     ")");
             }
 
-            plugin.getLogger().info("SQLite database initialized successfully!");
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().info("SQLite database initialized successfully!");
+            }
         } catch (SQLException e) {
-            plugin.getLogger().severe("Failed to initialize database: " + e.getMessage());
-            e.printStackTrace();
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().severe("Failed to initialize database: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 
@@ -93,7 +103,9 @@ public class StorageManager {
             // Update player statistics
             updatePlayerStatistics(playerName, blockType);
         } catch (SQLException e) {
-            plugin.getLogger().warning("Failed to record placement: " + e.getMessage());
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().warning("Failed to record placement: " + e.getMessage());
+            }
         }
     }
 
@@ -132,7 +144,9 @@ public class StorageManager {
                 pstmt.executeUpdate();
             }
         } catch (SQLException e) {
-            plugin.getLogger().warning("Failed to update player statistics: " + e.getMessage());
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().warning("Failed to update player statistics: " + e.getMessage());
+            }
         }
     }
 
@@ -161,7 +175,9 @@ public class StorageManager {
                 }
             }
         } catch (SQLException e) {
-            plugin.getLogger().warning("Failed to get player records: " + e.getMessage());
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().warning("Failed to get player records: " + e.getMessage());
+            }
         }
         return records;
     }
@@ -193,7 +209,9 @@ public class StorageManager {
                 }
             }
         } catch (SQLException e) {
-            plugin.getLogger().warning("Failed to get chunk records: " + e.getMessage());
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().warning("Failed to get chunk records: " + e.getMessage());
+            }
         }
         return records;
     }
@@ -220,7 +238,9 @@ public class StorageManager {
                 }
             }
         } catch (SQLException e) {
-            plugin.getLogger().warning("Failed to get player statistics: " + e.getMessage());
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().warning("Failed to get player statistics: " + e.getMessage());
+            }
         }
         return null;
     }
@@ -247,7 +267,9 @@ public class StorageManager {
                 }
             }
         } catch (SQLException e) {
-            plugin.getLogger().warning("Failed to get all player statistics: " + e.getMessage());
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().warning("Failed to get all player statistics: " + e.getMessage());
+            }
         }
         return stats;
     }
@@ -293,7 +315,9 @@ public class StorageManager {
 
             return new GlobalStatistics(totalPlacements, totalPlayers, blockCounts);
         } catch (SQLException e) {
-            plugin.getLogger().warning("Failed to get global statistics: " + e.getMessage());
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().warning("Failed to get global statistics: " + e.getMessage());
+            }
             return new GlobalStatistics(0, 0, new HashMap<>());
         }
     }
@@ -311,7 +335,9 @@ public class StorageManager {
                 }
             }
         } catch (SQLException e) {
-            plugin.getLogger().warning("Failed to optimize database: " + e.getMessage());
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().warning("Failed to optimize database: " + e.getMessage());
+            }
         }
     }
 
@@ -324,9 +350,13 @@ public class StorageManager {
                 stmt.executeUpdate("DELETE FROM placement_history");
                 stmt.executeUpdate("DELETE FROM player_statistics");
             }
-            plugin.getLogger().info("All records cleared successfully!");
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().info("All records cleared successfully!");
+            }
         } catch (SQLException e) {
-            plugin.getLogger().warning("Failed to clear records: " + e.getMessage());
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().warning("Failed to clear records: " + e.getMessage());
+            }
         }
     }
 
@@ -337,10 +367,14 @@ public class StorageManager {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();
-                plugin.getLogger().info("Database connection closed!");
+                if (plugin.getConfigManager().isDebugEnabled()) {
+                    plugin.getLogger().info("Database connection closed!");
+                }
             }
         } catch (SQLException e) {
-            plugin.getLogger().warning("Failed to close database: " + e.getMessage());
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().warning("Failed to close database: " + e.getMessage());
+            }
         }
     }
 

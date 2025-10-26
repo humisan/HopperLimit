@@ -96,3 +96,13 @@ storage:
   # Auto-save interval in ticks (20 ticks = 1 second)
   # Set to 0 to disable auto-save
   auto-save-interval: 6000
+
+# ========================================
+# Debug Settings
+# ========================================
+# Control console logging output.
+#
+debug:
+  # Enable debug logging (verbose console messages)
+  # Set to false to hide placement logs
+  enabled: false

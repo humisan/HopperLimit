@@ -43,14 +43,14 @@ public class BlockPlacementListener implements Listener {
             return;
         }
 
-        // Count existing blocks of this type in the chunk
+        // Count existing blocks of this type in the chunk (before placement)
         int count = countBlocksInChunk(block.getChunk(), material);
 
         // Get the limit for this block type (world-specific or default)
         String worldName = block.getWorld().getName();
         int limit = worldLimitManager.getLimit(worldName, blockType, config);
 
-        // Check if limit is exceeded
+        // Check if limit is exceeded (count is the number BEFORE this block is placed)
         if (count >= limit) {
             // Limit reached - cancel the event and notify
             event.setCancelled(true);
@@ -65,10 +65,12 @@ public class BlockPlacementListener implements Listener {
                 soundManager.playLimitSound(player);
             }
 
-            // Log the failed placement attempt
-            plugin.getLogger().info("Block placement denied for " + player.getName() +
-                    " at chunk (" + block.getChunk().getX() + "," + block.getChunk().getZ() +
-                    ") - Limit reached for " + blockType);
+            // Log the failed placement attempt (only if debug enabled)
+            if (config.isDebugEnabled()) {
+                plugin.getLogger().info("Block placement denied for " + player.getName() +
+                        " at chunk (" + block.getChunk().getX() + "," + block.getChunk().getZ() +
+                        ") - Limit reached for " + blockType);
+            }
         } else {
             // Block placed successfully
             if (config.isPlacedMessageEnabled()) {
@@ -89,10 +91,12 @@ public class BlockPlacementListener implements Listener {
                     block.getChunk().getZ()
             );
 
-            // Log the successful placement
-            plugin.getLogger().info("Block placement logged: " + player.getName() +
-                    " placed " + blockType + " at chunk (" + block.getChunk().getX() +
-                    "," + block.getChunk().getZ() + ")");
+            // Log the successful placement (only if debug enabled)
+            if (config.isDebugEnabled()) {
+                plugin.getLogger().info("Block placement logged: " + player.getName() +
+                        " placed " + blockType + " at chunk (" + block.getChunk().getX() +
+                        "," + block.getChunk().getZ() + ")");
+            }
         }
     }
 
