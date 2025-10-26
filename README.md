@@ -253,7 +253,7 @@ Created with ❤️ by [Hanyu]
 
 **Project Status**: ✅ Active Development
 
-**Latest Release**: [v2.0](https://github.com/humisan/HopperLimiter/releases/tag/v2.0)
+**Latest Release**: [v2.2](https://github.com/humisan/HopperLimiter/releases/tag/v2.2)
 
 ## Version Management 📦
 
@@ -266,6 +266,8 @@ This project follows semantic versioning:
 ### Version History
 | Version | Release Date | Changes |
 |---------|-------------|---------|
+| [v2.2](https://github.com/humisan/HopperLimiter/releases/tag/v2.2) | 2025-10-26 | Fixed map FULL display, tab completion, hopper count accuracy |
+| [v2.1](https://github.com/humisan/HopperLimiter/releases/tag/v2.1) | 2025-10-26 | Fixed map visualization and database-backed counting |
 | [v2.0](https://github.com/humisan/HopperLimiter/releases/tag/v2.0) | 2025-10-26 | Block break tracking, notifications, visualization |
 | [v1.1](https://github.com/humisan/HopperLimiter/releases/tag/v1.1) | 2025-10-26 | Fixed logging verbosity & hopper count |
 | [v1.0](https://github.com/humisan/HopperLimiter/releases/tag/v1.0) | 2025-10-26 | Initial release |
