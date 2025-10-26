@@ -253,4 +253,18 @@ Created with ❤️ by [Hanyu]
 
 **Project Status**: ✅ Active Development
 
-**Latest Release**: [v1.0](https://github.com/humisan/HopperLimiter/releases/tag/v1.0)
+**Latest Release**: [v1.1](https://github.com/humisan/HopperLimiter/releases/tag/v1.1)
+
+## Version Management 📦
+
+This project follows semantic versioning:
+- **Patch updates** (0.1 increment): Bug fixes, minor improvements
+  - Example: 1.0 → 1.1 → 1.2
+- **Major updates** (1.0 increment): New features, breaking changes
+  - Example: 1.0 → 2.0 → 3.0
+
+### Version History
+| Version | Release Date | Changes |
+|---------|-------------|---------|
+| [v1.1](https://github.com/humisan/HopperLimiter/releases/tag/v1.1) | 2025-10-26 | Fixed logging verbosity & hopper count |
+| [v1.0](https://github.com/humisan/HopperLimiter/releases/tag/v1.0) | 2025-10-26 | Initial release |
