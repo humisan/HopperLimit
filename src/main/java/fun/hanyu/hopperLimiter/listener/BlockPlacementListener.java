@@ -44,7 +44,9 @@ public class BlockPlacementListener implements Listener {
         }
 
         // Count existing blocks of this type in the chunk (before placement)
-        int count = countBlocksInChunk(block.getChunk(), material);
+        // Use database count for accuracy (excludes removed blocks)
+        int count = storageManager.getChunkBlockCount(block.getWorld().getName(),
+                block.getChunk().getX(), block.getChunk().getZ());
 
         // Get the limit for this block type (world-specific or default)
         String worldName = block.getWorld().getName();
@@ -73,8 +75,10 @@ public class BlockPlacementListener implements Listener {
             }
         } else {
             // Block placed successfully
+            // Display the count after placement (count + 1)
             if (config.isPlacedMessageEnabled()) {
-                Message.sendPlacedMessage(player, blockType, count + 1, limit);
+                int displayCount = count + 1;
+                Message.sendPlacedMessage(player, blockType, displayCount, limit);
             }
 
             // Play success sound if enabled

@@ -27,7 +27,9 @@ public class TabCompleterManager implements TabCompleter {
             "get",
             "global",
             "player",
-            "world"
+            "world",
+            "map",
+            "hotspots"
     );
 
     // Block types for future expansion

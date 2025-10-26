@@ -63,15 +63,16 @@ public class ChunkVisualizationManager {
                 String color = getChunkColor(count, limit);
 
                 if (x == playerChunkX && z == playerChunkZ) {
-                    line.append("§e[").append(indicator).append("]§r");
+                    line.append("§e[").append(indicator).append("]").append(" ");
                 } else {
-                    line.append(color).append(indicator).append("§r ");
+                    line.append(color).append(indicator).append(" ");
                 }
             }
             player.sendMessage(line.toString());
         }
 
-        player.sendMessage("§6Legend: §a■=Empty §e●=Moderate §c■=Full §e[Y]=You");
+        player.sendMessage("§r");
+        player.sendMessage("§6Legend: §a□=Empty §a◐=Low §e◑=Medium §6◕=High §c●=Full §e[]=You");
     }
 
     /**
