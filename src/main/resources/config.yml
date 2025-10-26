@@ -1,0 +1,98 @@
+# ========================================
+# HopperLimiter Configuration File
+# ========================================
+#
+# This configuration file controls the limits
+# for hoppers, chests, and barrels per chunk.
+#
+
+# ========================================
+# Default Block Limits
+# ========================================
+# Set the maximum number of each block type
+# that can be placed in a single chunk.
+# These are default limits used for all worlds.
+#
+limits:
+  # Maximum hoppers per chunk
+  hopper: 32
+
+  # Maximum chests per chunk
+  chest: 32
+
+  # Maximum barrels per chunk
+  barrel: 32
+
+# ========================================
+# World-Specific Limits
+# ========================================
+# Override default limits for specific worlds.
+# If a world is not listed here, default limits apply.
+# Example:
+#   world_nether:
+#     hopper: 16
+#     chest: 16
+#     barrel: 16
+#
+world-limits: {}
+
+# ========================================
+# Enabled/Disabled Settings
+# ========================================
+# Control which block types have limits enforced.
+#
+enabled:
+  # Enable hopper limiter
+  hopper: true
+
+  # Enable chest limiter
+  chest: true
+
+  # Enable barrel limiter
+  barrel: true
+
+# ========================================
+# Message Settings
+# ========================================
+# Control whether messages are sent to players.
+#
+messages:
+  # Show limit exceeded message when player tries to place a block
+  enabled: true
+
+  # Show placement notification when a block is successfully placed
+  placement-notification: true
+
+# ========================================
+# Sound Settings
+# ========================================
+# Control sound effects for block placement.
+#
+sounds:
+  # Enable sound effects
+  enabled: true
+
+  # Sound played when limit is exceeded
+  # Valid values: See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+  # Examples: ENTITY_ENDERMAN_TELEPORT, BLOCK_NOTE_BLOCK_PLING, ENTITY_ITEM_BREAK
+  limit-sound: ENTITY_ENDERMAN_TELEPORT
+
+  # Sound played when block is successfully placed
+  # Examples: ENTITY_ITEM_PICKUP, BLOCK_STONE_PLACE, ENTITY_CHICKEN_EGG
+  placed-sound: ENTITY_ITEM_PICKUP
+
+# ========================================
+# Storage Settings
+# ========================================
+# Configure data storage and logging.
+#
+storage:
+  # Enable block placement history recording
+  enable-history: true
+
+  # Enable player statistics tracking
+  enable-statistics: true
+
+  # Auto-save interval in ticks (20 ticks = 1 second)
+  # Set to 0 to disable auto-save
+  auto-save-interval: 6000

@@ -1,0 +1,18 @@
+name: HopperLimiter
+version: '1.0'
+main: fun.hanyu.hopperLimiter.HopperLimiter
+api-version: '1.20'
+authors: [ Hanyu ]
+description: Limit the number of hoppers, chests, and barrels per chunk
+
+commands:
+  hoplimit:
+    description: Main command for HopperLimiter
+    usage: /hoplimit [help|stats|limits|reload|version]
+    aliases: [ hl ]
+    permission: hoplimit.admin
+
+permissions:
+  hoplimit.admin:
+    description: Allows access to admin commands
+    default: op
