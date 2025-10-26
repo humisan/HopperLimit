@@ -32,6 +32,12 @@ public class Config {
     // Debug settings
     private boolean debugEnabled;
 
+    // Notification settings
+    private boolean capacityAlertEnabled;
+    private int capacityAlertThreshold;
+    private boolean rapidPlacementAlertEnabled;
+    private int rapidPlacementThreshold;
+
     public Config(JavaPlugin plugin) {
         this.plugin = plugin;
         loadConfig();
@@ -62,6 +68,12 @@ public class Config {
 
         // Load debug settings
         debugEnabled = config.getBoolean("debug.enabled", false);
+
+        // Load notification settings
+        capacityAlertEnabled = config.getBoolean("notifications.capacity-alerts.enabled", true);
+        capacityAlertThreshold = config.getInt("notifications.capacity-alerts.threshold-percentage", 90);
+        rapidPlacementAlertEnabled = config.getBoolean("notifications.rapid-placement-alerts.enabled", true);
+        rapidPlacementThreshold = config.getInt("notifications.rapid-placement-alerts.threshold", 5);
     }
 
     public void reloadConfig() {
@@ -116,6 +128,22 @@ public class Config {
 
     public boolean isDebugEnabled() {
         return debugEnabled;
+    }
+
+    public boolean isCapacityAlertEnabled() {
+        return capacityAlertEnabled;
+    }
+
+    public int getCapacityAlertThreshold() {
+        return capacityAlertThreshold;
+    }
+
+    public boolean isRapidPlacementAlertEnabled() {
+        return rapidPlacementAlertEnabled;
+    }
+
+    public int getRapidPlacementThreshold() {
+        return rapidPlacementThreshold;
     }
 
     public int getLimit(String blockType) {

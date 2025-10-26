@@ -5,6 +5,7 @@ import fun.hanyu.hopperLimiter.command.TabCompleterManager;
 import fun.hanyu.hopperLimiter.config.Config;
 import fun.hanyu.hopperLimiter.config.WorldLimitManager;
 import fun.hanyu.hopperLimiter.listener.BlockPlacementListener;
+import fun.hanyu.hopperLimiter.listener.BlockBreakListener;
 import fun.hanyu.hopperLimiter.sound.SoundManager;
 import fun.hanyu.hopperLimiter.storage.StorageManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +26,7 @@ public final class HopperLimiter extends JavaPlugin {
 
         // Register events
         getServer().getPluginManager().registerEvents(new BlockPlacementListener(this), this);
+        getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
 
         // Register commands
         LimiterCommand limiterCommand = new LimiterCommand(this);

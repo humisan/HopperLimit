@@ -5,10 +5,12 @@ import fun.hanyu.hopperLimiter.config.Config;
 import fun.hanyu.hopperLimiter.config.WorldLimitManager;
 import fun.hanyu.hopperLimiter.message.Message;
 import fun.hanyu.hopperLimiter.storage.StorageManager;
+import fun.hanyu.hopperLimiter.visualization.ChunkVisualizationManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -257,6 +259,77 @@ public class AdvancedCommand {
                 return true;
             default:
                 return false;
+        }
+    }
+
+    /**
+     * Handle map command: /hoplimit map [radius]
+     */
+    public void handleMap(Player player, String[] args) {
+        if (!player.hasPermission("hoplimit.admin")) {
+            Message.sendError(player, "You do not have permission!");
+            return;
+        }
+
+        int radius = 3;
+        if (args.length >= 2) {
+            try {
+                radius = Integer.parseInt(args[1]);
+                radius = Math.min(radius, 10); // Max radius of 10
+            } catch (NumberFormatException e) {
+                Message.sendError(player, "Invalid radius! Using default (3)");
+            }
+        }
+
+        ChunkVisualizationManager vizManager = new ChunkVisualizationManager(plugin);
+        vizManager.displayNearbyChunks(player, radius);
+    }
+
+    /**
+     * Handle hotspots command: /hoplimit hotspots [limit]
+     */
+    public void handleHotspots(Player player, String[] args) {
+        if (!player.hasPermission("hoplimit.admin")) {
+            Message.sendError(player, "You do not have permission!");
+            return;
+        }
+
+        int limit = 10;
+        if (args.length >= 2) {
+            try {
+                limit = Integer.parseInt(args[1]);
+                limit = Math.min(limit, 50);
+            } catch (NumberFormatException e) {
+                Message.sendError(player, "Invalid limit! Using default (10)");
+            }
+        }
+
+        ChunkVisualizationManager vizManager = new ChunkVisualizationManager(plugin);
+        List<ChunkVisualizationManager.ChunkHotspot> hotspots = vizManager.getHotspots(player.getWorld().getName(), limit);
+
+        player.sendMessage(ChatColor.DARK_AQUA + "=== " + ChatColor.AQUA + "Top Chunk Hotspots " +
+                ChatColor.DARK_AQUA + "===");
+        player.sendMessage(ChatColor.AQUA + "World: " + ChatColor.YELLOW + player.getWorld().getName());
+
+        if (hotspots.isEmpty()) {
+            player.sendMessage(ChatColor.YELLOW + "No hotspots found!");
+            return;
+        }
+
+        int rank = 1;
+        for (ChunkVisualizationManager.ChunkHotspot hotspot : hotspots) {
+            int percentage = (hotspot.count * 100) / config.getHopperLimit(); // Rough estimate
+            String color;
+            if (percentage >= 90) {
+                color = ChatColor.RED.toString();
+            } else if (percentage >= 70) {
+                color = ChatColor.GOLD.toString();
+            } else {
+                color = ChatColor.GREEN.toString();
+            }
+            player.sendMessage(ChatColor.AQUA + "#" + rank + " " + color + hotspot +
+                    ChatColor.AQUA + " (" + percentage + "%)");
+            rank++;
         }
     }
 }

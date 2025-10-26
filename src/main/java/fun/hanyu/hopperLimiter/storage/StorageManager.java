@@ -54,6 +54,9 @@ public class StorageManager {
                     "world TEXT NOT NULL," +
                     "chunk_x INTEGER NOT NULL," +
                     "chunk_z INTEGER NOT NULL," +
+                    "is_removed INTEGER DEFAULT 0," +
+                    "removed_at DATETIME," +
+                    "removed_by TEXT," +
                     "created_at DATETIME DEFAULT CURRENT_TIMESTAMP" +
                     ")");
 
@@ -65,6 +68,9 @@ public class StorageManager {
                     "hopper_count INTEGER DEFAULT 0," +
                     "chest_count INTEGER DEFAULT 0," +
                     "barrel_count INTEGER DEFAULT 0," +
+                    "hopper_removed INTEGER DEFAULT 0," +
+                    "chest_removed INTEGER DEFAULT 0," +
+                    "barrel_removed INTEGER DEFAULT 0," +
                     "last_placement TEXT," +
                     "created_at DATETIME DEFAULT CURRENT_TIMESTAMP," +
                     "updated_at DATETIME DEFAULT CURRENT_TIMESTAMP" +
@@ -146,6 +152,57 @@ public class StorageManager {
         } catch (SQLException e) {
             if (plugin.getConfigManager().isDebugEnabled()) {
                 plugin.getLogger().warning("Failed to update player statistics: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Record a block removal event
+     */
+    public void recordRemoval(String blockType, String world, int chunkX, int chunkZ, String removedBy) {
+        try {
+            // Mark the most recent placement of this type in this chunk as removed
+            String updateSql = "UPDATE placement_history SET is_removed = 1, removed_at = ?, removed_by = ? " +
+                    "WHERE block_type = ? AND world = ? AND chunk_x = ? AND chunk_z = ? AND is_removed = 0 " +
+                    "ORDER BY timestamp DESC LIMIT 1";
+            try (PreparedStatement pstmt = connection.prepareStatement(updateSql)) {
+                pstmt.setString(1, LocalDateTime.now().format(DATE_FORMATTER));
+                pstmt.setString(2, removedBy);
+                pstmt.setString(3, blockType);
+                pstmt.setString(4, world);
+                pstmt.setInt(5, chunkX);
+                pstmt.setInt(6, chunkZ);
+                int updatedRows = pstmt.executeUpdate();
+
+                // If a record was found and updated, decrement player statistics
+                if (updatedRows > 0) {
+                    updatePlayerRemovalStatistics(blockType);
+                }
+            }
+        } catch (SQLException e) {
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().warning("Failed to record removal: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Update player statistics for block removal
+     */
+    private void updatePlayerRemovalStatistics(String blockType) {
+        try {
+            String blockColumn = blockType.toLowerCase() + "_removed";
+            String updateSql = "UPDATE player_statistics SET " + blockColumn + " = " + blockColumn + " + 1, " +
+                    "updated_at = CURRENT_TIMESTAMP WHERE player_name = " +
+                    "(SELECT removed_by FROM placement_history WHERE block_type = ? AND is_removed = 1 " +
+                    "ORDER BY removed_at DESC LIMIT 1)";
+            try (PreparedStatement pstmt = connection.prepareStatement(updateSql)) {
+                pstmt.setString(1, blockType);
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().warning("Failed to update removal statistics: " + e.getMessage());
             }
         }
     }
@@ -320,6 +377,54 @@ public class StorageManager {
             }
             return new GlobalStatistics(0, 0, new HashMap<>());
         }
+    }
+
+    /**
+     * Get block count in a specific chunk
+     */
+    public int getChunkBlockCount(String world, int chunkX, int chunkZ) {
+        try {
+            String sql = "SELECT COUNT(*) as count FROM placement_history WHERE world = ? AND chunk_x = ? AND chunk_z = ? AND is_removed = 0";
+            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+                pstmt.setString(1, world);
+                pstmt.setInt(2, chunkX);
+                pstmt.setInt(3, chunkZ);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getInt("count");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().warning("Failed to get chunk block count: " + e.getMessage());
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Get chunk block counts for a world (for heatmap)
+     */
+    public Map<String, Integer> getChunkBlockCounts(String world) {
+        Map<String, Integer> chunkCounts = new HashMap<>();
+        try {
+            String sql = "SELECT chunk_x, chunk_z, COUNT(*) as count FROM placement_history WHERE world = ? AND is_removed = 0 GROUP BY chunk_x, chunk_z";
+            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+                pstmt.setString(1, world);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    while (rs.next()) {
+                        String key = rs.getInt("chunk_x") + "_" + rs.getInt("chunk_z");
+                        chunkCounts.put(key, rs.getInt("count"));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            if (plugin.getConfigManager().isDebugEnabled()) {
+                plugin.getLogger().warning("Failed to get chunk block counts: " + e.getMessage());
+            }
+        }
+        return chunkCounts;
     }
 
     /**

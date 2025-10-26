@@ -82,6 +82,12 @@ public class LimiterCommand implements CommandExecutor {
             case "world":
                 advancedCommand.handleWorld(player, args);
                 return true;
+            case "map":
+                advancedCommand.handleMap(player, args);
+                return true;
+            case "hotspots":
+                advancedCommand.handleHotspots(player, args);
+                return true;
             default:
                 Message.sendError(player, "Unknown subcommand! Use /hoplimit help for help.");
                 return true;
@@ -101,6 +107,8 @@ public class LimiterCommand implements CommandExecutor {
         Message.sendHelpLine(player, "/hoplimit global", "Show global statistics");
         Message.sendHelpLine(player, "/hoplimit player <name>", "Show player statistics");
         Message.sendHelpLine(player, "/hoplimit world <name>", "Show world limits");
+        Message.sendHelpLine(player, "/hoplimit map [radius]", "Display chunk visualization");
+        Message.sendHelpLine(player, "/hoplimit hotspots [limit]", "Show top chunk hotspots");
         Message.sendHelpLine(player, "/hoplimit reload", "Reload configuration");
         Message.sendHelpLine(player, "/hoplimit version", "Show plugin version");
     }

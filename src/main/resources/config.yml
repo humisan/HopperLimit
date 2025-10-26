@@ -106,3 +106,21 @@ debug:
   # Enable debug logging (verbose console messages)
   # Set to false to hide placement logs
   enabled: false
+
+# ========================================
+# Notification Settings
+# ========================================
+# Configure automatic alerts for admins.
+#
+notifications:
+  # Enable capacity warning alerts
+  capacity-alerts:
+    enabled: true
+    # Alert when chunk reaches this percentage (0-100)
+    threshold-percentage: 90
+
+  # Enable rapid placement detection
+  rapid-placement-alerts:
+    enabled: true
+    # Alert when player places this many blocks in 10 seconds
+    threshold: 5
