@@ -1,5 +1,5 @@
 name: HopperLimiter
-version: '1.0'
+version: '${version}'
 main: fun.hanyu.hopperLimiter.HopperLimiter
 api-version: '1.20'
 authors: [ Hanyu ]
