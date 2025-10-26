@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'fun.hanyu'
-version = '2.1'
+version = '2.2'
 archivesBaseName = 'HopperLimiter'
 
 repositories {

@@ -53,14 +53,18 @@ public class ChunkVisualizationManager {
         int playerChunkX = player.getLocation().getChunk().getX();
         int playerChunkZ = player.getLocation().getChunk().getZ();
 
+        // Use average of all limits for visualization
+        int avgLimit = (plugin.getConfigManager().getHopperLimit() +
+                       plugin.getConfigManager().getChestLimit() +
+                       plugin.getConfigManager().getBarrelLimit()) / 3;
+
         for (int x = playerChunkX - radius; x <= playerChunkX + radius; x++) {
             StringBuilder line = new StringBuilder("§r");
             for (int z = playerChunkZ - radius; z <= playerChunkZ + radius; z++) {
                 int count = storageManager.getChunkBlockCount(player.getWorld().getName(), x, z);
-                int limit = plugin.getConfigManager().getHopperLimit(); // Simple default
 
-                char indicator = getChunkIndicator(count, limit);
-                String color = getChunkColor(count, limit);
+                char indicator = getChunkIndicator(count, avgLimit);
+                String color = getChunkColor(count, avgLimit);
 
                 if (x == playerChunkX && z == playerChunkZ) {
                     line.append("§e[").append(indicator).append("]").append(" ");
